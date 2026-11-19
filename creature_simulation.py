@@ -67,6 +67,30 @@ class FlyingCreature(Creature):
         if target.hp < 0:
             target.hp = 0
         print(f"{target.name} HP is now {target.hp}")
+# ===============================
+# FireCreature Branch
+# ===============================
+class FireCreature(Creature):
+    def __init__(self, name, hp, attack_power, fire_level=0):
+        super().__init__(name, hp, attack_power)
+        self.fire_level = max(0, min(100, fire_level))
+
+    def emit_fire(self, new_fire_level):
+        self.fire_level = max(0, min(100, new_fire_level))
+        print(f"{self.name} emits fire at level {self.fire_level}!")
+
+    def attack(self, target):
+        if not self.is_alive():
+            print(f"{self.name} cannot attack because it is defeated.")
+            return
+        fire_bonus = self.fire_level // 10
+        total_damage = self.attack_power + fire_bonus
+        print(f"{self.name} unleashes flames at fire level {self.fire_level}!")
+        print(f"{self.name} burns {target.name} for {total_damage} damage!")
+        target.hp -= total_damage
+        if target.hp < 0:
+            target.hp = 0
+        print(f"{target.name} HP is now {target.hp}")
 
 if __name__ == "__main__":
     print("=== Creature Class Tests ===\n")
@@ -135,7 +159,6 @@ if __name__ == "__main__":
     hawk = FlyingCreature("Sky Hawk", 50, 8)
     hawk.fly_to(120)
     print(f"Altitude should be 120 → Actual: {hawk.altitude}")
-
     dummy = Creature("Practice Dummy", 40, 0)
     hawk.attack(dummy)
     print(f"Dummy HP should be 32 → Actual: {dummy.hp}")
@@ -143,3 +166,13 @@ if __name__ == "__main__":
     print()
     print("=== Tests Completed ===")
     print()
+    print("=== FireCreature Tests ===\n")
+    pyro = FireCreature("Flame Drake", 70, 10)
+    pyro.emit_fire(80)
+    print(f"Fire level should be 80 → Actual: {pyro.fire_level}")
+
+    dummy = Creature("Practice Dummy", 50, 0)
+    pyro.attack(dummy)
+    print(f"Dummy HP should be 32 → Actual: {dummy.hp}")
+    print()
+    print("=== Tests Completed ===")
